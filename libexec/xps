@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -x
+
+test "$UID" = 0 || test "$EUID" = 0
+
+ln -sf "/etc/intel-undervolt.$(basename $0).conf" "/etc/intel-undervolt.conf" && intel-undervolt apply
+
+smbios-thermal-ctl --set-thermal-mode=quiet
+if test -d /sys/devices/system/cpu/intel_pstate/; then
+	if test "$(</sys/devices/system/cpu/intel_pstate/status)" != "off"; then
+		tee /sys/devices/system/cpu/intel_pstate/no_turbo <<<1
+	fi
+	tee /sys/devices/system/cpu/intel_pstate/max_perf_pct <<<10
+else
+	tee /sys/devices/system/cpu/cpufreq/boost <<<0
+fi
+if test -f /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq; then
+	tee /sys/devices/system/cpu/cpufreq/policy?/scaling_max_freq <<<400000
+fi
+if test "$(</sys/devices/system/cpu/cpufreq/policy0/scaling_driver)" != "intel_pstate"; then
+	tee /sys/devices/system/cpu/cpufreq/policy?/scaling_governor <<<powersave
+fi
+
+# Turn off bluetooth unless a paired device is connected
+(bluetoothctl paired-devices | awk '{print$2}' | xargs --no-run-if-empty -n1 bluetoothctl info | grep -q 'Connected: yes') || bluetoothctl power off
+
+xbacklight -set 1
+xbacklight -ctrl dell::kbd_backlight -set 0

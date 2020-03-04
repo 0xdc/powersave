@@ -1,0 +1,11 @@
+[Unit]
+Description=Apply powersaving on the system
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+[Service]
+Type=oneshot
+ExecStart=-/usr/sbin/powertop --auto-tune
+ExecStart=/usr/libexec/powersave/hpc
+
+[Install]
+WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

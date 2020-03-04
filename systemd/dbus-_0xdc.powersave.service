@@ -1,0 +1,9 @@
+[Unit]
+Description=Apply CPU frequency scaling and powersaving
+
+[Service]
+BusName=_0xdc.powersave
+ExecStart=/usr/libexec/powersave/powersave.py
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -x
+
+test "$UID" = 0 || test "$EUID" = 0
+
+ln -sf "/etc/intel-undervolt.$(basename $0).conf" "/etc/intel-undervolt.conf" && intel-undervolt apply
+
+smbios-thermal-ctl --set-thermal-mode=balanced
+if test -d /sys/devices/system/cpu/intel_pstate; then
+	if test "$(</sys/devices/system/cpu/intel_pstate/status)" != "off"; then
+		tee /sys/devices/system/cpu/intel_pstate/no_turbo <<<1
+	fi
+	tee /sys/devices/system/cpu/intel_pstate/max_perf_pct <<<50
+fi
+if test -f /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq; then
+	tee /sys/devices/system/cpu/cpufreq/policy?/scaling_max_freq <<<1300000
+fi
+xbacklight -ctrl dell::kbd_backlight -set 50
