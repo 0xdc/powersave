@@ -1,4 +1,4 @@
-.PHONY: all install
+.PHONY: all install clean
 
 DESTDIR ?=
 PREFIX ?= /usr
@@ -26,3 +26,6 @@ install:
 	install -t $(DESTDIR)$(PREFIX)/libexec/powersave libexec/hpc libexec/turbo libexec/xps libexec/powersave.py
 	install -t $(DESTDIR)$(ETC) intel-undervolt/intel-undervolt.hpc.conf intel-undervolt/intel-undervolt.turbo.conf intel-undervolt/intel-undervolt.xps.conf
 
+
+clean:
+	@rm -vf $(FILES)
