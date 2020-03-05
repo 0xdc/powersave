@@ -1,8 +1,18 @@
-.PHONY: install
+.PHONY: all install
 
 DESTDIR ?=
 PREFIX ?= /usr
 ETC ?= /etc
+
+FILES = \
+	systemd/dbus-_0xdc.powersave.service \
+	systemd/powersave.service \
+	libexec/powersave.py
+
+all: $(FILES)
+
+%: %.in
+	sed 's:@@PREFIX@@:$(PREFIX):g' $< > $@
 
 install:
 	mkdir -p $(DESTDIR)$(ETC)

@@ -5,7 +5,7 @@ After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate
 [Service]
 Type=oneshot
 ExecStart=-/usr/sbin/powertop --auto-tune
-ExecStart=/usr/libexec/powersave/hpc
+ExecStart=@@PREFIX@@/libexec/powersave/hpc
 
 [Install]
 WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

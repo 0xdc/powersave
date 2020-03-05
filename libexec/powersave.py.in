@@ -15,15 +15,15 @@ class Powersave(dbus.service.Object):
 
     @dbus.service.method(BusName, out_signature='s')
     def xps(self):
-        return subprocess.getoutput("/usr/libexec/powersave/xps")
+        return subprocess.getoutput("@@PREFIX@@/libexec/powersave/xps")
 
     @dbus.service.method(BusName, out_signature='s')
     def hpc(self):
-        return subprocess.getoutput("/usr/libexec/powersave/hpc")
+        return subprocess.getoutput("@@PREFIX@@/libexec/powersave/hpc")
 
     @dbus.service.method(BusName, out_signature='s')
     def turbo(self):
-        return subprocess.getoutput("/usr/libexec/powersave/turbo")
+        return subprocess.getoutput("@@PREFIX@@/libexec/powersave/turbo")
 
 
 if __name__ == '__main__':
